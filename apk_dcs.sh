@@ -44,7 +44,7 @@ clear
 			read -r appfolder
 				if [ -d ./$appfolder ]; then
  					cd ./$appfolder
- 					java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder+modified.apk
+ 					java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder-modified.apk
 					cd ..
 					echo "Apk file is compiled"
 				else
@@ -54,6 +54,8 @@ clear
 			read key
 			clear	
 	elif [ "$option" -eq 3 ]; then
+while true; do
+cd ./Output/
 # Remove scroll buffer
 echo -e '\0033\0143'
 # Colourful terminal output (from AOSPA building script)
@@ -74,42 +76,39 @@ echo -n "Filename without .apk extension: "
 read appname
 
 # Check existence
-if [ -f $appname.apk ]
+if [ -f $appname-modified.apk ]
 then
 	echo -e ""
 	echo -e "${bldgrn}APK exists."
 else
-	echo -e "${bldred}$appname.apk does not exist. Exiting..."
-	exit 1
+	echo -e "${bldred}$appname+modified.apk does not exist inside /Output folder. Exiting..."
 fi
 
 # Phase 2
 echo -e "${bldgrn}Signing APK..."
-java -jar ./binary/zipaligner/signapk.jar ./binary/testkey.x509.pem ./binary/testkey.pk8 $appname.apk temp.apk
+java -jar ../binary/zipaligner/signapk.jar ../binary/zipaligner/testkey.x509.pem ../binary/zipaligner/testkey.pk8 $appname-modified.apk temp.apk
 
 # Check existence
 if [ -f temp.apk ]; then
-	mv $appname.apk $appname-original.apk
+	mv $appname+modified.apk $appname-original.apk
 	clear
 	echo -e "${bldgrn}Zipaligning..."
 else
 	echo -e "${bldred}FATAL: Temporary APK not found. Exiting..."
-	exit 1
 fi
 
 # Phase 3
-chmod a+x ./binary/zipaligner/zipalign
-./binary/zipalign -f -v 4 temp.apk $appname.apk
+chmod a+x ../binary/zipaligner/zipalign
+../binary/zipaligner/zipalign -f -v 4 temp.apk $appname-signed.apk
 
 # Check existence
-if [ -f $appname.apk ]
+if [ -f $appname-signed.apk ]
 then
 	rm temp.apk
 	echo -e "${bldcya}Would you like to push to your device now?"
 else
 	echo -e "${bldred}FATAL: Final APK does not exist. Exiting..."
-    mv $appname-original.apk $appname.apk
-	exit 1
+    mv $appname-original.apk $appname-modified.apk
 fi
 
 # Push to device
@@ -118,21 +117,26 @@ echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
 	echo -e '\0033\0143'
-	chmod a+x ./adb
+	chmod a+x ../binary/zipaligner/adb
 	echo -e "${cya}Firing up ADB 1.0.31..."
-	./binary/zipaligner/adb start-server
+	../binary/zipaligner/adb start-server
 	echo -e "${cya}Waiting for device - make sure device is connected in ${bldcya}debugging mode"
-	./binary/zipaligner/adb wait-for-device
+	../binary/zipaligner/adb wait-for-device
 	echo -e "${cya}Installing apk to device..."
-	./binary/zipaligner/adb install $appname.apk
-	echo -e "${bldgrn}Done. Exiting..."
-	./binary/zipaligner/adb kill-server
-	exit 0
-else
+	../binary/zipaligner/adb install $appname.apk
+	echo -e "${bldgrn}Done..."
+	../binary/zipaligner/adb kill-server
 	echo -e ""
-	read -p "Press any key to go back."
-	break
+	read -p "Press [ENTER] key to continue..."
+	read key
+else
+echo "Opening main menu..."
+sleep 2
 fi
+	cd ..
+	clear
+	break
+done
 	fi
 done
 
