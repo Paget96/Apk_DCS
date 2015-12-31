@@ -26,7 +26,7 @@ if [ "$option" -eq 1 ]; then
 echo -n "Filename without .apk extension: "
 read -r appname
 	if [ -f $appname.apk ]; then
-			sh ./binary/apktool d $appname.apk
+			sh ./binary/apktool/apktool d $appname.apk
 			echo "Apk file is decompiled"
 		else
 			echo -e "$appname.apk doesn't exist. Check file name!!!"
@@ -38,8 +38,8 @@ clear
 		read -r appfolder
 			if [ -d ./$appfolder ]; then
  				cd ./$appfolder
- 				java -jar ../binary/apktool.jar b -d -o $appfolder_modified.apk
-				cd ..	
+ 				java -jar ../binary/apktool/apktool.jar b -d -o $appfolder_modified.apk
+				cd ..
 				echo "Apk file is compiled"
 			else
 				echo -e "$appfolder doesn't exist. Check source folder!!!"
@@ -79,7 +79,7 @@ fi
 
 # Phase 2
 echo -e "${bldgrn}Signing APK..."
-java -jar ./binary/signapk.jar ./binary/testkey.x509.pem ./binary/testkey.pk8 $appname.apk temp.apk
+java -jar ./binary/zipaligner/signapk.jar ./binary/testkey.x509.pem ./binary/testkey.pk8 $appname.apk temp.apk
 
 # Check existence
 if [ -f temp.apk ]; then
@@ -92,7 +92,7 @@ else
 fi
 
 # Phase 3
-chmod a+x ./binary/zipalign
+chmod a+x ./binary/zipaligner/zipalign
 ./binary/zipalign -f -v 4 temp.apk $appname.apk
 
 # Check existence
@@ -114,13 +114,13 @@ then
 	echo -e '\0033\0143'
 	chmod a+x ./adb
 	echo -e "${cya}Firing up ADB 1.0.31..."
-	./binary/adb start-server
+	./binary/zipaligner/adb start-server
 	echo -e "${cya}Waiting for device - make sure device is connected in ${bldcya}debugging mode"
-	./binary/adb wait-for-device
+	./binary/zipaligner/adb wait-for-device
 	echo -e "${cya}Installing apk to device..."
-	./binary/adb install $appname.apk
+	./binary/zipaligner/adb install $appname.apk
 	echo -e "${bldgrn}Done. Exiting..."
-	./binary/adb kill-server
+	./binary/zipaligner/adb kill-server
 	exit 0
 else
 	echo -e ""
