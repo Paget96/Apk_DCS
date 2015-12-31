@@ -90,7 +90,7 @@ java -jar ../binary/zipaligner/signapk.jar ../binary/zipaligner/testkey.x509.pem
 
 # Check existence
 if [ -f temp.apk ]; then
-	mv $appname+modified.apk $appname-original.apk
+	mv $appname-modified.apk $appname-original.apk
 	clear
 	echo -e "${bldgrn}Zipaligning..."
 else
