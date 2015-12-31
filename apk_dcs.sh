@@ -26,30 +26,31 @@ if [ "$option" -eq 1 ]; then
 echo -n "Filename without .apk extension: "
 read -r appname
 	if [ -f $appname.apk ]; then
-			sh ./binary/apktool/apktool d $appname.apk
-			echo "Apk file is decompiled"
-		else
-			echo -e "$appname.apk doesn't exist. Check file name!!!"
+		sh ./binary/apktool/apktool d $appname.apk
+		echo "Apk file is decompiled"
+	else
+		echo -e "$appname.apk doesn't exist. Check file name!!!"
 	fi
-sleep 2
+echo "Press [ENTER] key to continue..."
+read key
 clear
-	elif [ "$option" -eq 2 ]; then
-		echo -n "Filename without .apk extension: "
-		read -r appfolder
-			if [ -d ./$appfolder ]; then
- 				cd ./$appfolder
- 				java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder+modified.apk
-				cd ..
-				echo "Apk file is compiled"
-			else
-				echo -e "$appfolder doesn't exist. Check source folder!!!"
-		fi
-	sleep 2
-clear	
+		elif [ "$option" -eq 2 ]; then
+			echo -n "Filename without .apk extension: "
+			read -r appfolder
+				if [ -d ./$appfolder ]; then
+ 					cd ./$appfolder
+ 					java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder+modified.apk
+					cd ..
+					echo "Apk file is compiled"
+				else
+					echo -e "$appfolder doesn't exist. Check source folder!!!"
+				fi
+			echo "Press [ENTER] key to continue..."
+			read key
+			clear	
 	elif [ "$option" -eq 3 ]; then
 # Remove scroll buffer
 echo -e '\0033\0143'
-
 # Colourful terminal output (from AOSPA building script)
 cya=$(tput setaf 6)             #  cyan
 txtbld=$(tput bold)             # Bold
