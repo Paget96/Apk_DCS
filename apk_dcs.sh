@@ -38,7 +38,7 @@ clear
 		read -r appfolder
 			if [ -d ./$appfolder ]; then
  				cd ./$appfolder
- 				java -jar ../binary/apktool/apktool.jar b -d -o $appfolder+modified.apk
+ 				java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder+modified.apk
 				cd ..
 				echo "Apk file is compiled"
 			else
