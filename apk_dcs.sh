@@ -25,8 +25,8 @@ read -r option
 if [ "$option" -eq 1 ]; then
 echo -n "Filename without .apk extension: "
 read -r appname
-	if [ -f $appname.apk ]; then
-		sh ./binary/apktool/apktool d $appname.apk
+	if [ -f ./Input/$appname.apk ]; then
+		sh ./binary/apktool/apktool d ./Input/$appname.apk
 		echo "Apk file is decompiled"
 	else
 		echo -e "$appname.apk doesn't exist. Check file name!!!"
