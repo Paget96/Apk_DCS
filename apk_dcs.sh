@@ -1,7 +1,7 @@
 #!/bin/bash
-# Copyright (C) 2015 Paget96@xda
-# APKtool by The Android Open Source Project
-# Thanks to Zipalign/sign script for Linux by aureljared@XDA.
+# Copyright (C) 2015 Paget96 @ XDA-Developers
+# Thanks to brut.all and ibotpeaches for APKTool
+# Thanks to aureljared @ XDA-Developers for zipalign/sign script for Linux.
 #=======================================================================#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ if [ ! -d ./Output ]; then
 fi
 echo "1. Decompile"
 echo "2. Compile"
-echo "3. Signing .apk package"
+echo "3. Sign .apk package"
 echo ""
 echo -n "Please select an option: "
 read -r option
@@ -32,9 +32,9 @@ echo -n "Filename without .apk extension: "
 read -r appname
 	if [ -f ./Input/$appname.apk ]; then
 		sh ./binary/apktool/apktool d ./Input/$appname.apk
-		echo "Apk file is decompiled"
+		echo "APK file decompiled successfully"
 	else
-		echo -e "$appname.apk doesn't exist. Check file name!!!"
+		echo -e "$appname.apk does not exist. Check file name and try again !"
 	fi
 echo "Press [ENTER] key to continue..."
 read key
@@ -46,9 +46,9 @@ clear
  					cd ./$appfolder
  					java -jar ../binary/apktool/apktool.jar b -d -o ../Output/$appfolder-modified.apk
 					cd ..
-					echo "Apk file is compiled"
+					echo "APK file compiled successfully"
 				else
-					echo -e "$appfolder doesn't exist. Check source folder!!!"
+					echo -e "$appfolder does not exist. Check source folder !"
 				fi
 			echo "Press [ENTER] key to continue..."
 			read key
@@ -58,9 +58,9 @@ while true; do
 cd ./Output/
 # Remove scroll buffer
 echo -e '\0033\0143'
-# Colourful terminal output (from AOSPA building script)
+# Colorful terminal output (from AOSPA building script)
 cya=$(tput setaf 6)             #  cyan
-txtbld=$(tput bold)             # Bold
+txtbld=$(tput bold)             # bold
 bldred=${txtbld}$(tput setaf 1) #  red
 bldgrn=${txtbld}$(tput setaf 2) #  green
 bldcya=${txtbld}$(tput setaf 6) #  cyan
@@ -69,7 +69,7 @@ bldcya=${txtbld}$(tput setaf 6) #  cyan
 echo -e "${bldcya}Enter the name of the apk you want to sign."
 echo -e "${bldcya}Example: ${cya}SystemUI"
 echo -e ""
-echo -e "${bldred}NOTES:"
+echo -e "${bldred}NOTE:"
 echo -e "${cya}What you enter here will also be the filename of your final APK."
 echo -e "${cya}APK must be in the same folder as this script."
 echo -n "Filename without .apk extension: "
@@ -81,7 +81,7 @@ then
 	echo -e ""
 	echo -e "${bldgrn}APK exists."
 else
-	echo -e "${bldred}$appname+modified.apk does not exist inside /Output folder. Exiting..."
+	echo -e "${bldred}$appname-modified.apk does not exist inside /Output folder. Exiting..."
 fi
 
 # Phase 2
@@ -92,7 +92,7 @@ java -jar ../binary/zipaligner/signapk.jar ../binary/zipaligner/testkey.x509.pem
 if [ -f temp.apk ]; then
 	mv $appname-modified.apk $appname-original.apk
 	clear
-	echo -e "${bldgrn}Zipaligning..."
+	echo -e "${bldgrn}Zipaligning APK..."
 else
 	echo -e "${bldred}FATAL: Temporary APK not found. Exiting..."
 fi
@@ -105,13 +105,13 @@ chmod a+x ../binary/zipaligner/zipalign
 if [ -f $appname-signed.apk ]
 then
 	rm temp.apk
-	echo -e "${bldcya}Would you like to push to your device now?"
+	echo -e "${bldcya}Would you like to install the APK to your device?"
 else
 	echo -e "${bldred}FATAL: Final APK does not exist. Exiting..."
     mv $appname-original.apk $appname-modified.apk
 fi
 
-# Push to device
+# Push - install to device
 read -p "y/n: " -n 1 -r
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -122,9 +122,9 @@ then
 	../binary/zipaligner/adb start-server
 	echo -e "${cya}Waiting for device - make sure device is connected in ${bldcya}debugging mode"
 	../binary/zipaligner/adb wait-for-device
-	echo -e "${cya}Installing apk to device..."
+	echo -e "${cya}Installing APK to device..."
 	../binary/zipaligner/adb install $appname.apk
-	echo -e "${bldgrn}Done..."
+	echo -e "${bldgrn}Installation success"
 	../binary/zipaligner/adb kill-server
 	echo -e ""
 	read -p "Press [ENTER] key to continue..."
@@ -139,5 +139,4 @@ fi
 done
 	fi
 done
-
 
