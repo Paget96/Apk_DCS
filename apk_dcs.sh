@@ -14,7 +14,12 @@
 #=======================================================================#
 
 while true; do
-
+if [ ! -d ./Input ]; then
+	mkdir ./Input
+fi
+if [ ! -d ./Output ]; then
+	mkdir ./Output
+fi
 echo "1. Decompile"
 echo "2. Compile"
 echo "3. Signing .apk package"
