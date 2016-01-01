@@ -10,10 +10,15 @@
 chmod a+x ./apk_dcs.sh
 ```
 5. Launch Apk_DCS tool: 
+
 5.1 Open terminal in current folder (right click > open terminal) 
+
 5.2 sh ./apk_dcs.sh
+
 **Note**: Also you can launch file with double click if your Linux allow that
+
 **Note**: After launching tool will make Input/Output folder by it self
+
 6. Copy .apk file which you want to decompile (for first) inside /Input folder
 
 **Using options**
