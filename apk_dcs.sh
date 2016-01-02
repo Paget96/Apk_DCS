@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright (C) 2015 Paget96 @ XDA-Developers
+# Copyright (C) 2016 Paget96 @ XDA-Developers
 # Thanks to brut.all and ibotpeaches for APKTool
 # Thanks to aureljared @ XDA-Developers for zipalign/sign script for Linux.
 #=======================================================================#
